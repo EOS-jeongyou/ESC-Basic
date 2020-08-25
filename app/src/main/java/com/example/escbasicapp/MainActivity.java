@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -61,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
             {
                 Toast.makeText(this, "PERMISSION GRANTED", Toast.LENGTH_SHORT).show();
             }
+            else
+            {
+                Toast.makeText(this, "PERMISSION DENIED, PLEASE GRANT PERMISSION AT SETTINGS MENU.", Toast.LENGTH_SHORT).show();
+                Log.d("PermissionDenied", "권한이 거부되어 앱을 종료합니다.");
+                finish();
+            }
         }
     }
 
@@ -81,14 +88,16 @@ public class MainActivity extends AppCompatActivity {
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : Add Contact
-                Toast.makeText(MainActivity.this, "AddContactTest", Toast.LENGTH_SHORT).show();
+
+                Intent addIntent = new Intent(MainActivity.this, AddEditActivity.class);
+                startActivity(addIntent);
             }
         });
         contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : Address
+                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivity(contactIntent);
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
