@@ -48,6 +48,13 @@ public class ContactActivity extends AppCompatActivity {
 
         setInfo(currentPage);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setInfo(currentPage);
+    }
+
     private void setUpUI()
     {
         toolbar = findViewById(R.id.contact_toolbar);
@@ -102,7 +109,10 @@ public class ContactActivity extends AppCompatActivity {
                 startActivity(callIntent);
                 break;
             case R.id.menu_contact_edit:
-                //TODO : edit
+                Intent editIntent = new Intent(ContactActivity.this,AddEditActivity.class);
+                editIntent.putExtra("add_edit","edit");
+                editIntent.putExtra("position",currentPage);
+                startActivity(editIntent);
                 break;
             case R.id.menu_contact_message:
                 Intent messageIntent = new Intent(ContactActivity.this, MessageActivity.class);

@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton call;
     private ImageButton backspace;
 
+    private TextView name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +87,15 @@ public class MainActivity extends AppCompatActivity {
         call = findViewById(R.id.main_ibtn_call);
         backspace = findViewById(R.id.main_ibtn_backspace);
 
+        name = findViewById(R.id.main_tv_name);
+
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent addIntent = new Intent(MainActivity.this, AddEditActivity.class);
+                addIntent.putExtra("phone_num",phoneNum.getText().toString());
+                addIntent.putExtra("add_edit","add");
                 startActivity(addIntent);
             }
         });
@@ -122,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 if(phoneNum.getText().length() == 0)
                     return;
                 phoneNum.setText(iHateHyphen(phoneNum.getText().subSequence(0,phoneNum.getText().length()-1).toString()));
+                findPhone();
                 if(phoneNum.getText().length() == 0)
                 {
                     message.setVisibility(View.GONE);
@@ -133,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View view) {
                 phoneNum.setText("");
+                findPhone();
                 message.setVisibility(View.GONE);
                 backspace.setVisibility(View.GONE);
                 return true;
@@ -153,8 +161,30 @@ public class MainActivity extends AppCompatActivity {
                 phoneNum.setText(iHateHyphen(phoneNum.getText() + input));
                 message.setVisibility(View.VISIBLE);
                 backspace.setVisibility(View.VISIBLE);
+                findPhone();
             }
-        });
+
+});
+
+    }
+    private void findPhone()
+    {
+        String find = phoneNum.getText().toString().replaceAll("-","");
+        Boolean found = false;
+
+        for (int i = 0; i < DummyData.contacts.size(); i++) {
+            if(DummyData.contacts.get(i).getPhone().toString().replaceAll("-","").contains(find) && !found)
+            {
+                found = true;
+                name.setText(DummyData.contacts.get(i).getName() + " : " + DummyData.contacts.get(i).getPhone());
+            }
+            else if (DummyData.contacts.get(i).getPhone().toString().replaceAll("-","").contains(find) && found)
+            {
+                name.setText(name.getText().toString() + "\n" + DummyData.contacts.get(i).getName() + " : " + DummyData.contacts.get(i).getPhone());
+            }
+        }
+        if(phoneNum.length() <= 3 || !found)
+            name.setText("");
     }
     private int getResourceID(final String resName, final String resType, final Context ctx)
     {
